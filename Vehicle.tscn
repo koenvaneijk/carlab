@@ -1,0 +1,125 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Vehicle.gd" type="Script" id=1]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 2, 0.5, 1 )
+
+[sub_resource type="CubeMesh" id=2]
+size = Vector3( 4, 1, 2 )
+
+[sub_resource type="CylinderMesh" id=3]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.5
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="CylinderShape" id=4]
+height = 0.5
+radius = 0.5
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[node name="Vehicle" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="VehicleBody" type="RigidBody" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
+mesh = SubResource( 2 )
+skeleton = NodePath("../..")
+
+[node name="FrontLeftWheel" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1, 0.5, -1.5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="FrontLeftWheel"]
+mesh = SubResource( 3 )
+material/0 = SubResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="FrontLeftWheel"]
+shape = SubResource( 4 )
+
+[node name="FrontRightWheel" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1, 0.5, 1.5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="FrontRightWheel"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86781e-06, -0.00188303, -0.00261354 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 6 )
+
+[node name="CollisionShape" type="CollisionShape" parent="FrontRightWheel"]
+shape = SubResource( 4 )
+
+[node name="RearLeftWheel" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1, 0.5, -1.5 )
+
+[node name="MeshInstance" type="MeshInstance" parent="RearLeftWheel"]
+mesh = SubResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RearLeftWheel"]
+shape = SubResource( 4 )
+
+[node name="RearRightWheel" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1, 0.5, 1.5 )
+axis_lock_linear_x = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+
+[node name="MeshInstance" type="MeshInstance" parent="RearRightWheel"]
+mesh = SubResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RearRightWheel"]
+shape = SubResource( 4 )
+
+[node name="FrontLeftSuspension" type="Generic6DOFJoint" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -1 )
+nodes/node_a = NodePath("../VehicleBody")
+nodes/node_b = NodePath("../FrontLeftWheel")
+linear_limit_y/upper_distance = 0.25
+linear_limit_y/lower_distance = 0.25
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 0.5
+linear_spring_y/damping = 0.5
+
+[node name="FrontRightSuspension" type="Generic6DOFJoint" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 )
+nodes/node_a = NodePath("../VehicleBody")
+nodes/node_b = NodePath("../FrontRightWheel")
+linear_limit_y/upper_distance = 0.25
+linear_limit_y/lower_distance = 0.25
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 0.5
+linear_spring_y/damping = 0.5
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="RearLeftSuspension" type="Generic6DOFJoint" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, -1 )
+nodes/node_a = NodePath("../VehicleBody")
+nodes/node_b = NodePath("../RearLeftWheel")
+linear_limit_y/upper_distance = 0.25
+linear_limit_y/lower_distance = 0.25
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 0.5
+linear_spring_y/damping = 0.5
+
+[node name="RearRightSuspension" type="Generic6DOFJoint" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 1 )
+nodes/node_a = NodePath("../VehicleBody")
+nodes/node_b = NodePath("../RearRightWheel")
+linear_limit_y/upper_distance = 0.25
+linear_limit_y/lower_distance = 0.25
+linear_motor_y/target_velocity = 10.0
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 0.5
+linear_spring_y/damping = 0.5
+angular_motor_y/target_velocity = 10.0

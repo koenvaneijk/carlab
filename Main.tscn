@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Track.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Vehicle.tscn" type="PackedScene" id=2]
+
+[node name="Main" type="Spatial"]
+
+[node name="Track" parent="." instance=ExtResource( 1 )]
+
+[node name="Vehicle" parent="." instance=ExtResource( 2 )]
+
+[node name="Camera" type="Camera" parent="Vehicle"]
+transform = Transform( 0.931957, -0.0895969, 0.351323, 0, 0.968986, 0.247117, -0.362568, -0.230303, 0.903053, 0, 5.83126, 7.64695 )
